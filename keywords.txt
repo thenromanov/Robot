@@ -1,0 +1,12 @@
+Button  KEYWORD1
+Motor   KEYWORD1
+Leds    KEYWORD1
+Gyro    KEYWORD1
+Cam_Block   KEYWORD1
+Vect    KEYWORD1
+
+read    KEYWORD2
+turn_on KEYWORD2
+turn_off    KEYWORD2
+start   KEYWORD2
+get_length  KEYWORD2
