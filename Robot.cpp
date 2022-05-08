@@ -54,11 +54,15 @@ double Gyro::read() {
     if (mpu.dmpGetCurrentFIFOPacket(fifoBuffer)) {
         mpu.dmpGetQuaternion(&q, fifoBuffer);
         mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
-        heading = ypr[0];
+        heading = ypr[0] - zero;
     }
     while (heading - mod < -PI) mod -= 2 * PI;
     while (heading - mod > PI) mod += 2 * PI;
     return heading;
+}
+
+void Gyro::set_zero() {
+    zero = heading;
 }
 
 Cam_Block::Cam_Block() {}

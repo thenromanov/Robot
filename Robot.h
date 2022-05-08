@@ -44,14 +44,15 @@ class Gyro {
 		Gyro(int sda, int scl);
 
 		double read();
+		void set_zero();
 
 	private:
-		double heading;
+		double heading, mod = 0, zero = 0;
 		int sda, scl;
 		uint8_t fifoBuffer[64];
 		Quaternion q;
 		VectorFloat gravity;
-		float ypr[3], mod = 0;
+		float ypr[3];
 		MPU6050 mpu;
 };
 
