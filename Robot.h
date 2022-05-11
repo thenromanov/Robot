@@ -83,4 +83,37 @@ class Vect {
 		double operator^ (const Vect& b) const;
 };
 
+class Kicker {
+	public:
+		Kicker(int pin);
+
+		void kick(bool state);
+
+	private:
+		int pin;
+		uint64_t tmr;
+};
+
+class Sensor {
+	public:
+		int value[16];
+
+		Sensor(const int _digital_pin[3], const int _analog_pin[2], const int _order[16], const int _grey[16]);
+
+		int read();
+		
+	private:
+		int digital_pin[3], analog_pin[2], order[16], grey[16];
+		int iter, state;
+};
+
+class Interrupter {
+	public:
+		Interrupter(int pin);
+
+		int read();
+	private:
+		int pin;
+};
+
 #endif

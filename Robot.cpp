@@ -91,3 +91,37 @@ int Vect::operator% (const Vect& b) const {
 double Vect::operator^ (const Vect& b) const {
     return atan2(x * b.y - y * b.x, x * b.x + y * b.y);
 }
+
+Kicker::Kicker(int pin) : pin(pin) {
+    pinMode(pin, OUTPUT);
+}
+
+void Kicker::kick(bool state) {
+    if (state && millis() - tmr > 3000) tmr = millis();
+    if (millis() - tmr < 60) digitalWrite(pin, HIGH);
+    else digitalWrite(pin, LOW);
+}
+
+Sensor::Sensor(const int _digital_pin[3], const int _analog_pin[2], const int _order[16], const int _grey[16]) : iter(0), state(0) {
+    for (int i = 0; i < 3; i++) digital_pin[i] = _digital_pin[i], pinMode(digital_pin[i], OUTPUT);
+    for (int i = 0; i < 2; i++) analog_pin[i] = _analog_pin[i];
+    for (int i = 0; i < 16; i++) order[i] = _order[i], grey[i] = _grey[i], value[i] = 450;
+}
+
+int Sensor::read() {
+    digitalWrite(digital_pin[0], (iter >> 2) & 1);
+    digitalWrite(digital_pin[1], (iter >> 1) & 1);
+    digitalWrite(digital_pin[2], (iter >> 0) & 1);
+    value[order[iter]] = analogRead(analog_pin[0]);
+    value[order[iter + 8]] = analogRead(analog_pin[1]);
+    state = ((state & (~(1 << order[iter]))) | ((value[order[iter]] < grey[order[iter]]) << order[iter]));
+    state = ((state & (~(1 << order[iter + 8]))) | ((value[order[iter + 8]] < grey[order[iter + 8]]) << order[iter + 8]));
+    iter = (iter + 1) % 8;
+    return state;
+}
+
+Interrupter::Interrupter(int pin) : pin(pin) {}
+
+int Interrupter::read() {
+    return analogRead(pin);
+}
